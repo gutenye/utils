@@ -19,7 +19,7 @@
   var utils = {}
 
   /////////////
-  // Lang
+  // ¤Core
   ////////////
 
   function toString(x) {
@@ -76,9 +76,8 @@
   utils.isFunction = isFunction
 
   //////////////////
-  // Object
+  // ¤Object
   //////////////////
-
 
   /**
    * Iterate over an object's own enumerable properties.
@@ -93,6 +92,26 @@
   }
   utils.forOwn = forOwn
 
+  // Iterate object and create a new object.
+  //
+  // mapOwn(object, callback{value, key, result}) // -> new result object
+  //
+  // Example:
+  //
+  //   mapOwn({a: 1}, (value, key, result) => {
+  //     result[key.toUpperCase()] = value
+  //   })
+  //   // => {A: 1}
+  //
+  function mapOwn(object, callback) {
+    var result = {}
+    forOwn(object, (value, key) => {
+      callback(value, key, result)
+    })
+    return result
+  }
+  utils.mapOwn = mapOwn
+
   // -> function
   /*
   function matches(obj, matches) {
@@ -104,7 +123,7 @@
   // String
   //////////////
 
-  var SPLIT = /\s+/
+  var SPLIT = /[\s_-]+/
   var NON_ALPHA = /[^A-Za-z]/g
   var PASCAL_CASE = /(\w)(\w*)/g
   function pascalize(g0, g1, g2) {
@@ -115,7 +134,10 @@
   }
 
   /**
-   * Convert a string to pascalcase.
+   * Convert a string to PascalCase
+   *
+   * "ab_cd ef"  -> "AbCdEf"
+   *
    */
   function pascalCase(str) {
     return str
@@ -126,7 +148,7 @@
   utils.pascalCase = pascalCase
 
   /**
-   * Convert a string to camelcase.
+   * Convert a string to camelCase
    */
   function camelCase(str) {
     str = pascalCase(str)
