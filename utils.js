@@ -82,6 +82,27 @@
     return setInterval(callback, delay, ...args)
   }
 
+  utils.Timer = class {
+    id = null;
+
+    constructor(callback, delay) {
+      this.callback = callback
+      this.delay = delay
+    }
+
+    start() {
+      if (this.id)
+        return
+      this.callback()
+      this.id = setInterval(this.callback, this.delay)
+    }
+
+    stop() {
+      clearInterval(this.id)
+      this.id = null
+    }
+  }
+
   //////////////////
   // ¤Object
   //////////////////
