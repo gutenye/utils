@@ -2,6 +2,7 @@
 
 /**
  * This source code is downloaded from https://github.com/gutenye/utils/tree/master/utils.js
+ * Also see https://github.com/defunctzombie/node-util/blob/master/util.js
  */
 
 /*
@@ -61,7 +62,7 @@
   utils.isNumber = isNumber
 
   function isNaN(value) {
-    return isNumber(value) && value != +value
+    return isNumber(value) && value !== +value
   }
   utils.isNaN = isNaN
 
@@ -74,6 +75,12 @@
     return typeof value === 'function' || (value && toString(value) === '[object Function]') || false
   }
   utils.isFunction = isFunction
+
+  // run at first time, then setup timer.
+  utils.setInterval = function(callback, delay, ...args) {
+    callback()
+    return setInterval(callback, delay, ...args)
+  }
 
   //////////////////
   // ¤Object
@@ -112,6 +119,15 @@
   }
   utils.mapOwn = mapOwn
 
+  function pick(object, ...keys) {
+    var result = {}
+    keys.forEach(key => {
+      result[key] = object[key]
+    })
+    return result
+  }
+  utils.pick = pick
+
   // -> function
   /*
   function matches(obj, matches) {
@@ -120,7 +136,7 @@
  */
 
   ///////////////
-  // String
+  // ¤String
   //////////////
 
   var SPLIT = /[\s_-]+/
